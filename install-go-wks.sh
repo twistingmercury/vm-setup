@@ -5,7 +5,7 @@ if  [ ${nusr} == "root" ]; then
     exit 1
 fi
 
-if[ -s home/${nusr}/go/src ]; then
+if [ -s home/${nusr}/go/src ]; then
     echo the user ${nusr}\'s go workspace already exists.  Moving on...
 fi
 
@@ -26,7 +26,7 @@ printf "creating Go workspace  ...\n"
 mkdir -p $GOPATH/src $GOPATH/bin $GOPATH/pkg
 chown -R ${nusr}:${nusr} $GOPATH
 
-printf 'installing dep  ...\n'
-sudo curl https://raw.githubnusrcontent.com/golang/dep/master/install.sh | sh
-printf 'finished installing dep!\n'
+# printf 'installing dep  ...\n'
+# sudo curl https://raw.githubnusrcontent.com/golang/dep/master/install.sh | sh
+# printf 'finished installing dep!\n'
 printf 'finished installing Go!\n'
