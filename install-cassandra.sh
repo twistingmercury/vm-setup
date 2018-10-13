@@ -6,6 +6,13 @@ if [ ! -f /etc/lsb-release ]; then
   exit 2;
 fi
 
+nusr=$USER
+
+if  [ ${nusr} = "root" ]; then
+    printf "do NOT run as sudo\n\n"
+    exit 3
+fi
+
 if [ $(dpkg-query -W -f='${Status}' openjdk-8-jre-headless 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     printf "installing compatible version of JRE for Cassandra...\n"
 
@@ -31,6 +38,9 @@ if [ $(dpkg-query -W -f='${Status}' cassandra 2>/dev/null | grep -c "ok installe
 
     printf "\ninstalling python cassandra-driver...\n"
     sudo -H pip install cassandra-driver
+
+    export CQLSH_NO_BUNDLED=true
+    echo 'export CQLSH_NO_BUNDLED=true' >> /home/${nusr}/.bashrc
 
     printf "finished installing Cassandra!\n\n"
 else
