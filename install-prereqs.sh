@@ -1,4 +1,11 @@
 #!/bin/bash
+if [ $(uname -s) != 'Linux' ]; then printf "only meant to run on Linux!\n"; exit 1; fi
+
+if [ ! -f /etc/lsb-release ]; then
+  printf "scripts are only meant for Ubuntu 18.04\n\n"
+  exit 2;
+fi
+
 printf "\ninstalling prereqisite packages ...\n"
 
 if [ $(dpkg-query -W -f='${Status}' xclip 2>/dev/null | grep -c "ok installed") -eq 0 ]; then

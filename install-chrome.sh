@@ -1,4 +1,11 @@
 #!/bin/bash
+if [ $(uname -s) != 'Linux' ]; then printf "only meant to run on Linux!\n"; exit 1; fi
+
+if [ ! -f /etc/lsb-release ]; then
+  printf "scripts are only meant for Ubuntu 18.04\n\n"
+  exit 2;
+fi
+
 if [ -e "/usr/bin/google-chrome-stable" ]; then
     printf "Google Chrome browser is already installed. Moving on...\n"
     exit 0
