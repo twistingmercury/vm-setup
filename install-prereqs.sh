@@ -1,5 +1,11 @@
 #!/bin/bash
-printf "installing prereqisite packages ...\n"
+printf "\ninstalling prereqisite packages ...\n"
+
+if [ $(dpkg-query -W -f='${Status}' xclip 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+    sudo apt-get install -y xclip
+else
+    echo xclip already installed. Moving on...
+fi
 
 if [ $(dpkg-query -W -f='${Status}' linux-headers-$(uname -r) 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     if [ $($(uname -a) 2>/dev/null | grep -c "SMP Debian") -eq 1 ]; then
@@ -20,6 +26,18 @@ if [ $(dpkg-query -W -f='${Status}' dkms 2>/dev/null | grep -c "ok installed") -
     sudo apt-get install -y dkms
 else
     echo dkms already installed. Moving on...
+fi
+
+if [ $(dpkg-query -W -f='${Status}' python 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+    sudo apt-get install -y python
+else
+    echo python 2.7 already installed. Moving on...
+fi
+
+if [ $(dpkg-query -W -f='${Status}' python-pip 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+    sudo apt-get install -y python-pip
+else
+    echo python pip already installed. Moving on...
 fi
 
 if [ $(dpkg-query -W -f='${Status}' apt-transport-https 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
@@ -58,23 +76,17 @@ else
    echo openssh-server already installed. Moving on...
 fi
 
-if [ ! -d /opt/VBoxGuestAdditions-5.2.14 ]; then
+if [ ! -d /opt/VBoxGuestAdditions-5.2.18 ]; then
     printf "installing VBoxGuestAdditions...\n"
-    wget http://download.virtualbox.org/virtualbox/5.2.14/VBoxGuestAdditions_5.2.14.iso
+    wget http://download.virtualbox.org/virtualbox/5.2.18/VBoxGuestAdditions_5.2.18.iso
     sudo mkdir /media/VBoxGuestAdditions
-    sudo mount -o loop,ro VBoxGuestAdditions_5.2.14.iso /media/VBoxGuestAdditions
+    sudo mount -o loop,ro VBoxGuestAdditions_5.2.18.iso /media/VBoxGuestAdditions
     sudo sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run
     sudo umount /media/VBoxGuestAdditions
-    rm VBoxGuestAdditions_5.2.14.iso
+    rm VBoxGuestAdditions_5.2.18.iso
     sudo rmdir /media/VBoxGuestAdditions
 
     printf "finished VBoxGuestAdditions ...\n\n"
 else
     echo "VBoxGuestAdditions already installed. Moving on..."
 fi
-
-# if [ $(dpkg-query -W -f='${Status}' lightdm 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-#     sudo apt-get install -y lightdm
-# else
-#    echo lightdm already installed. Moving on...
-# fi

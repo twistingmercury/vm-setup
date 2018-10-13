@@ -1,12 +1,24 @@
 #!/bin/bash
-nusr=$1
-if  [ ${nusr} == "root" ]; then
-    printf "do NOT run as sudo! Example:\n    $ sh ./install-go.wks.sh\n\n"
+nusr=$USER
+
+if  [ ${nusr} = "root" ]; then
+    printf "do NOT run as sudo\n\n"
     exit 1
 fi
 
-if [ -s home/${nusr}/go/src ]; then
+if [ -d "/usr/local/go" ]; then
+    printf "Go language is alread installed. Moving on...\n"
+else
+    printf "installing Go...\n"
+    wget https://dl.google.com/go/go1.11.1.linux-amd64.tar.gz
+    sudo tar -C /usr/local -xzf go1.11.1.linux-amd64.tar.gz
+    sudo rm go1.11.1.linux-amd64.tar.gz
+    printf "finished installing Go!\n\n"
+fi
+
+if [ -s "/home/${nusr}/go/src" ]; then
     echo the user ${nusr}\'s go workspace already exists.  Moving on...
+    exit 0
 fi
 
 printf "setting up Go workspace for ${nusr} ...\n"
@@ -26,7 +38,4 @@ printf "creating Go workspace  ...\n"
 mkdir -p $GOPATH/src $GOPATH/bin $GOPATH/pkg
 chown -R ${nusr}:${nusr} $GOPATH
 
-# printf 'installing dep  ...\n'
-# sudo curl https://raw.githubnusrcontent.com/golang/dep/master/install.sh | sh
-# printf 'finished installing dep!\n'
 printf 'finished installing Go!\n'
