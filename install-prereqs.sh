@@ -8,6 +8,8 @@ fi
 
 printf "\ninstalling prereqisite packages ...\n"
 
+sudo apt-get install -y git
+
 if [ $(dpkg-query -W -f='${Status}' xclip 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     sudo apt-get install -y xclip
 else
